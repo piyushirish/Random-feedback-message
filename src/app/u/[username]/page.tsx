@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import axios, { AxiosError } from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -76,7 +75,7 @@ export default function Message_page() {
         ...data,
       });
 
-      toast("default")
+      toast("message sent successfully")
 
 
       form.reset({ ...form.getValues(), content: "" });

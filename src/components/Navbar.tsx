@@ -22,9 +22,17 @@ function Navbar() {
                     <Button className='w-full md:w-auto' onClick={() => signOut()} >Logout</Button>
                     </>
                 ) : (
+                    <>
+                    <div>
                     <Link href="/sign-in">
                         <Button className='w-full md:w-auto' >Login</Button>
                     </Link>
+                    <Link href="/sign-up" className='ml-1'>
+                        <Button className='w-full md:w-auto' >SignUp</Button>
+                    </Link>
+                    </div>
+                    </>
+                    
                 )
             }
         </div>
