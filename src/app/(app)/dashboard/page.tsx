@@ -16,7 +16,7 @@ import { Separator } from '@/components/ui/separator'
 import { User } from 'next-auth';
 
 
-function page() {
+function Page() {
 
   const {data: session} = useSession()
   const [messages, setMessages] = useState<Message[]>([])
@@ -158,4 +158,4 @@ function page() {
   )
 }
 
-export default page
+export default Page
