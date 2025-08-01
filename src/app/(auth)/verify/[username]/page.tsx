@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { verifySchema } from '@/schemas/verifySchema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,7 +12,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
-function verifyAccount() {
+function VerifyAccount() {
     const router = useRouter();
     const param = useParams<{username:string}>()
 
@@ -26,6 +26,7 @@ function verifyAccount() {
                 username: param.username,
                 code: data.code
             })
+            console.log(response);
             toast("success")
             router.push('/sign-in')
         } catch (error) {
@@ -68,4 +69,4 @@ function verifyAccount() {
   )
 }
 
-export default verifyAccount
+export default VerifyAccount

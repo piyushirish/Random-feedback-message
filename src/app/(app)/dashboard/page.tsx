@@ -40,6 +40,7 @@ function Page() {
       setValue('acceptMessage', isAccepting);
     } catch (error) {
       const AxiosError = error as AxiosError<ApiResponse>;
+      console.log(AxiosError);
       toast("failed to fetch message settings")
     } finally {
       setIsSwitchLoading(false)
@@ -57,6 +58,7 @@ function Page() {
       }
     } catch (error) {
       const AxiosError = error as AxiosError<ApiResponse>;
+      console.log(AxiosError);
       toast("failed to fetch message settings")
     } finally {
       setIsSwitchLoading(false)
@@ -81,6 +83,7 @@ function Page() {
       toast(response.data.message)
     } catch (error) {
       const AxiosError = error as AxiosError<ApiResponse>;
+      console.log(AxiosError);
       toast("failed to fetch message settings")
     }
   }
@@ -141,7 +144,7 @@ function Page() {
       <div>
         {
           messages.length>0 ? (
-            messages.map((message, index) => (
+            messages.map((message) => (
               <MessageCard 
               key={message.id}
               message={message}

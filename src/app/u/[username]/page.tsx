@@ -41,7 +41,6 @@ export default function Message_page() {
   const username = params.username;
 
   const {
-    complete,
     completion,
     isLoading: isSuggestLoading,
     error,
@@ -74,7 +73,7 @@ export default function Message_page() {
         username,
         ...data,
       });
-
+      console.log(response);
       toast("message sent successfully")
 
 
