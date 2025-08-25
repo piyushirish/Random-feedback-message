@@ -42,7 +42,7 @@ export default function Message_page() {
 
   const {
     completion,
-    isLoading: isSuggestLoading,
+    //isLoading: isSuggestLoading,
     error,
   } = useCompletion({
     api: "/api/suggest-messages",
@@ -81,6 +81,7 @@ export default function Message_page() {
 
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
+      console.log(axiosError)
       toast("Error");
     } finally {
       setIsLoading(false);

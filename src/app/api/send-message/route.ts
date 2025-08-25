@@ -32,7 +32,7 @@ export async function POST(request:Request) {
             },{status: 200})
 
     } catch (error) {
-        console.log("error adding messages")
+        console.log("error adding messages", error)
         return Response.json({
                 success:false,
                 message: "internal server error"
