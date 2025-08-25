@@ -139,9 +139,9 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (token && session.user) {
         session.user._id = token._id as string;
-        (session.user as any).isVerified = token.isVerified;
-        (session.user as any).isAcceptingMessage = token.isAcceptingMessages;
-        (session.user as any).username = token.username;
+        (session.user ).isVerified = token.isVerified;
+        (session.user ).isAcceptingMessages = token.isAcceptingMessages;
+        (session.user ).username = token.username;
       }
       return session;
     },

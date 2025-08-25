@@ -1,4 +1,4 @@
-import { Schema , Document, Types } from "mongoose";
+import { Schema , Types } from "mongoose";
 import mongoose from "mongoose";
 import { ReactNode } from "react";
 
