@@ -50,7 +50,11 @@ function Page() {
       } finally{
         setIsCheckingUsername(false)
       }
+      
     }
+    if (username.trim() !== "") {
+    checkUsernameUnique()
+  }
   },[username] ) 
 
   const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
@@ -58,6 +62,7 @@ function Page() {
     try {
       console.log(data)
       const response = await axios.post<ApiResponse>('/api/sign-up', data)
+      console.log(response)
       toast("Success")
       router.replace(`/verify/${username}`)
       setIsSubmitting(false)
