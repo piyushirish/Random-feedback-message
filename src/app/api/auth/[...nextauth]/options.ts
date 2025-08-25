@@ -70,19 +70,16 @@
 //     },
 //     secret: process.env.NEXTAUTH_SECRET
 // }
-
-
-import { NextAuthOptions, User } from "next-auth";
+import { NextAuthOptions, User as NextAuthUser } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import dbConnect from "@/lib/dbConnect";
-import UserModel from "@/models/user";
+import UserModel, { User as MongooseUser } from "@/models/user";
 
-// define a type for our credentials
 interface Credentials {
   email: string;
   password: string;
-  identifier?: string; // you’re checking both email and username
+  identifier?: string;
 }
 
 export const authOptions: NextAuthOptions = {
@@ -96,60 +93,54 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(
         credentials: Credentials | undefined
-      ): Promise<User | null> {
+      ): Promise<NextAuthUser | null> {
         if (!credentials) return null;
 
         await dbConnect();
-        try {
-          const user = await UserModel.findOne({
-            $or: [
-              { email: credentials.identifier || credentials.email },
-              { username: credentials.identifier },
-            ],
-          });
 
-          if (!user) {
-            throw new Error("No user found with this identifier");
-          }
+        const user = await UserModel.findOne({
+          $or: [
+            { email: credentials.identifier || credentials.email },
+            { username: credentials.identifier },
+          ],
+        });
 
-          if (!user.isVerified) {
-            throw new Error("Please verify your account before login");
-          }
+        if (!user) throw new Error("No user found with this identifier");
+        if (!user.isVerified)
+          throw new Error("Please verify your account before login");
 
-          const isPasswordCorrect = await bcrypt.compare(
-            credentials.password,
-            user.password
-          );
+        const isPasswordCorrect = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+        if (!isPasswordCorrect) throw new Error("Password is incorrect");
 
-          if (isPasswordCorrect) {
-            return user as unknown as User; // casting because mongoose returns Document
-          } else {
-            throw new Error("Password is incorrect");
-          }
-        } catch (err) {
-          // forward error as proper Error
-          if (err instanceof Error) throw err;
-          throw new Error("Authorization failed");
-        }
+        // ✅ Map mongoose user → NextAuth User
+        return {
+          id: user._id.toString(), // NextAuth requires `id: string`
+          email: user.email,
+          name: user.username,
+        };
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token._id = (user as any)._id?.toString(); // if your User type doesn’t extend mongoose schema
-        token.isVerified = (user as any).isVerified;
-        token.isAcceptingMessages = (user as any).isAcceptingMessages;
-        token.username = (user as any).username;
+        // 👇 we safely extend the token with custom fields
+        const u = user as unknown as MongooseUser;
+        token._id = u._id?.toString();
+        token.isVerified = u.isVerified;
+        token.isAcceptingMessages = u.isAcceptingMessage;
+        token.username = u.username;
       }
       return token;
     },
     async session({ session, token }) {
       if (token && session.user) {
-        (session.user as any)._id = token._id;
+        session.user._id = token._id as string;
         (session.user as any).isVerified = token.isVerified;
-        (session.user as any).isAcceptingMessages =
-          token.isAcceptingMessages;
+        (session.user as any).isAcceptingMessage = token.isAcceptingMessages;
         (session.user as any).username = token.username;
       }
       return session;

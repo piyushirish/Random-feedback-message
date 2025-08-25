@@ -1,8 +1,9 @@
-import { Schema , Document } from "mongoose";
+import { Schema , Document, Types } from "mongoose";
 import mongoose from "mongoose";
 import { ReactNode } from "react";
 
 export interface Message extends Document {
+    _id: Types.ObjectId;
     title: ReactNode;
     content: string;
     createdAt: Date
@@ -21,6 +22,7 @@ const MessageSchema: Schema<Message> = new Schema({
 })
 
 export interface User extends Document{
+    _id: Types.ObjectId; 
     username: string;
     email: string;
     password: string;
