@@ -14,3 +14,6 @@
 
 //   return result.toUIMessageStreamResponse();
 // }
+export async function Suggest() {
+  return new Response("Not implemented , I will soon add this feature", { status: 501 });
+}
