@@ -14,6 +14,10 @@
 
 //   return result.toUIMessageStreamResponse();
 // }
-export async function Suggest() {
-  return new Response("Not implemented , I will soon add this feature", { status: 501 });
+// src/app/api/suggest-messages/route.ts
+import { NextResponse } from "next/server";
+
+// Dummy export to satisfy Next.js
+export async function GET() {
+  return NextResponse.json({ message: "Not implemented yet" }, { status: 501 });
 }
